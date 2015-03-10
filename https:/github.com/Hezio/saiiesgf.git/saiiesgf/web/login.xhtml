@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Login</title>
+        <h:outputStylesheet library="css" name="default.css" />
+    </h:head>
+    <h:body>
+
+        <h:panelGroup rendered="#{param['sucesso'] != null}">
+            <script type="text/javascript">
+                window.location = '#{facesContext.externalContext.requestContextPath}/admin/home.xhtml';
+                addToHome.show();
+            </script>
+        </h:panelGroup>
+
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="center">
+                <h:form id="form" styleClass="loginPanelStyle" prependId="false">
+                    <p:growl id="msgs" showDetail="true" sticky="false" />
+                    <p:panelGrid columns="2">
+                        <f:facet name="header">
+                            Painel de Login
+                        </f:facet>
+                        <h:outputText value="Matricula : "></h:outputText>
+                        <p:inputText id="login" value="#{loginControle.usuario.login}"
+                                     required="true" requiredMessage="Favor informe o login!">
+                            <f:validateLength minimum="1" />
+                        </p:inputText>
+                        <h:outputText value="senha : "></h:outputText>
+                        <p:password id="senha" value="#{loginControle.usuario.senha}"
+                                    required="true" requiredMessage="Favor Informe a senha!">
+                            <f:validateLength minimum="1" />
+                        </p:password>
+                        <f:facet name="footer">
+                            <p:commandButton id="entrar" value="Entrar" update="msgs"
+                                             action="#{loginControle.logar}" type="submit"
+                                             icon="ui-icon-check" style="margin:0"></p:commandButton>
+                        </f:facet>
+                    </p:panelGrid>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>

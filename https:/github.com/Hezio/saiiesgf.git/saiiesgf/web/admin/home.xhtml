@@ -1,0 +1,45 @@
+<ui:composition template="/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content" >
+        
+        <p:panel header="Alunos" rendered="#{sessionScope.loginControle.administrador}"  >
+            <h:panelGrid columns="2" width="100">
+                <h:panelGroup rendered="#{homeControle.pieAlunos != null}">
+                    
+                    <p:pieChart  value="#{homeControle.pieAlunos}" style="width:400px;height:300px" 
+                                 title="Professores"  legendPosition="w" showDataLabels="true" />
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{homeControle.pieAlunosInstituicao != null}">
+                    <p:pieChart  value="#{homeControle.pieAlunosInstituicao}" style="width:400px;height:300px" 
+                                 title="Instituicao" legendPosition="w" showDataLabels="true"/>
+                </h:panelGroup>
+
+            </h:panelGrid>
+        </p:panel>
+
+        <h:panelGrid columns="2" width="100" rendered="#{sessionScope.loginControle.administrador}" >
+            <p:panel header="Professores">
+                <h:panelGroup rendered="#{homeControle.pieProfessores != null}">
+                    <p:pieChart  value="#{homeControle.pieProfessores}" style="width:400px;height:300px"  
+                                 title="Instituicao" legendPosition="w" showDataLabels="true"/>
+                </h:panelGroup>
+            </p:panel>
+        </h:panelGrid>
+        <h:panelGrid rendered="#{sessionScope.loginControle.aluno||sessionScope.loginControle.professor}" >
+             <center>
+                 <h1>
+                     Seja bem vindo!
+                 </h1>  
+                    <p:graphicImage value="/resources/imagens/ies.png" width="100%" height="100%" />
+             <h2>
+                     Realize a avaliação institucional respondendo o(s) formulário(s) ao lado!
+              </h2>   
+             </center>
+        </h:panelGrid>
+
+    </ui:define>
+</ui:composition>

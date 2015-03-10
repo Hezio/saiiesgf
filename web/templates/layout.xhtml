@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:f="http://java.sun.com/jsf/core"
+       xmlns:h="http://java.sun.com/jsf/html"
+       xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui">
+
+    <h:head >
+        <title>Gerenciador de Disciplinas</title>
+        <h:outputStylesheet library="css" name="default.css" />
+        <f:metadata>
+            <f:event type="preRenderView"
+                     listener="#{loginControle.protegeLogin}" />
+        </f:metadata>
+    </h:head>
+
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="140" header="Gerenciador de Disciplinas"
+                          resizable="false" closable="false" collapsible="false">
+                <center>
+                    <p:graphicImage value="/resources/imagens/ies_fasc.jpg" width="50%" height="50%" />
+                </center>
+            </p:layoutUnit>
+
+
+            <p:layoutUnit position="west" size="200" header="Menu"
+                          resizable="true" closable="false" collapsible="true">
+                <ui:include src="tile/LeftMenu.xhtml" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <ui:insert name="content">Put default content here, if any.</ui:insert>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>

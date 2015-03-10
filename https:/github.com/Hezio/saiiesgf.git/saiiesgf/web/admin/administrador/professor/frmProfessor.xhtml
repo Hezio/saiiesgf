@@ -1,0 +1,209 @@
+<ui:composition template="/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form id="form" prependId="false" >
+            <h:panelGroup id="panel">
+                <p:growl id="mensagem" showDetail="true" life="2000" />
+                <p:dataTable widgetVar="listDataTable" id="tabela" var="professor"
+                             rowKey="#{professor.idPessoa}" paginator="true" rows="10"
+                             value="#{professorControle.listaProfessores}"
+                             emptyMessage="Nenhum valor encontrado" selectionMode="single"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,50"
+                             selection="#{professorControle.professor}"
+                             filteredValue="#{professorControle.professoresFiltrados}">
+
+                    <f:facet name="header">Lista de Professores</f:facet>
+                    <p:column headerText="Nome" sortBy="#{professor.nome}"
+                              filterBy="#{professor.nome}" id="nome">  
+                        #{professor.nome}  
+                    </p:column>
+                    <p:column headerText="CPF" sortBy="#{professor.CPF}"
+                              filterBy="#{professor.CPF}" id="CPF">  
+                        #{professor.CPF}  
+                    </p:column>
+                    <p:column headerText="Data Nascimento"
+                              sortBy="#{professor.dtNascimento}"
+                              filterBy="#{professor.dtNascimento}" id="dtNascimento">  
+                        #{professor.dtNascimento}
+                    </p:column>
+                    <p:column headerText="Cracha" sortBy="#{professor.cracha}"
+                              filterBy="#{professor.cracha}" id="cracha">  
+                        #{professor.cracha}
+                    </p:column>
+                    <p:column headerText="Formacao" sortBy="#{professor.formacao}"
+                              filterBy="#{professor.formacao}" id="formacao">  
+                        #{professor.formacao}
+                    </p:column>
+
+                    <p:column>
+                        <p:commandButton id="alterar" value="Alterar"
+                                         icon="ui-icon-pencil" title="Alterar"
+                                         update=":formCadastroEdicao:panelCadastroEdicao"
+                                         oncomplete="dialogCadastroEdicao.show()"
+                                         actionListener="#{professorControle.carregarProfessor(professor)}"
+                                         rendered="#{loginControle.administrador}" />
+
+                        <p:commandButton id="excluir" value="Excluir"
+                                         actionListener="#{professorControle.excluirProfessor(professor)}"
+                                         title="Excluir" icon="ui-icon-trash" update=":form:panel"
+                                         rendered="#{loginControle.administrador}" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton id="novo" value="Novo professor"
+                                         actionListener="#{professorControle.prepararAdicionarProfessor}"
+                                         oncomplete="dialogCadastroEdicao.show()"
+                                         update=":formCadastroEdicao:panelCadastroEdicao"
+                                         icon="ui-icon-star" title="Criar Novo Professor"
+                                         onclick="listDataTable.unselectAllRows();"
+                                         rendered="#{loginControle.administrador}" />
+
+
+                    </f:facet>
+                </p:dataTable>
+            </h:panelGroup>
+        </h:form>
+        
+        <p:dialog header="Gerencia de Professores" appendToBody="true"
+                  widgetVar="dialogCadastroEdicao" resizable="false" modal="true"
+                  showEffect="fade" width="580">
+            <h:form id="formCadastroEdicao" prependId="false">
+
+                <h:panelGroup id="panelCadastroEdicao" 
+                              style="margin-bottom:10px">
+                    <table>
+                        <tr>
+                            <td><h:outputLabel for="nome" value="Nome:" /></td>
+                            <td colspan="3"><p:inputText id="nome"
+                                                         value="#{professorControle.professor.nome}" required="true"
+                                                         requiredMessage="Favor Informe o nome!" style="width:379px">
+                                    <f:validateLength minimum="10" />
+                                </p:inputText></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel for="CPF" value="CPF:" /></td>
+                            <td><p:inputMask mask="999.999.999-99" id="CPF"
+                                             value="#{professorControle.professor.CPF}" required="true"
+                                             requiredMessage="Favor Informe o CPF!">
+                                    <f:validateLength minimum="11" />
+                                </p:inputMask></td>
+                            <td><h:outputLabel for="dtNascimento"
+                                               value="Data Nascimento:" /></td>
+                            <td><p:inputMask mask="99/99/9999" id="dtNascimento"
+                                             value="#{professorControle.professor.dtNascimento}">
+                                </p:inputMask></td>
+                        </tr>
+
+                        <tr>
+                            <td><h:outputLabel for="cracha" value="Cracha:" /></td>
+
+                            <td><p:inputText id="cracha"
+                                             value="#{professorControle.professor.cracha}" required="true"
+                                             requiredMessage="Favor Informe o Cracha">
+                                    <f:validateLength minimum="4" />
+                                </p:inputText></td>
+                            <td><h:outputLabel for="formacao" value="Formacao:" /></td>
+                            <td><p:inputText id="formacao"
+                                             value="#{professorControle.professor.formacao}" required="true"
+                                             requiredMessage="Favor Informe a Formacao!">
+                                    <f:validateLength minimum="4" />
+                                </p:inputText></td>
+                        </tr>
+
+                        <tr>
+                            <td><h:outputLabel for="estado" value="Estado:" /></td>
+                            <td colspan="1"><p:selectOneMenu id="estado" converter="EstadoConverter"
+                                                             value="#{professorControle.estado}"
+                                                             effect="fade" required="true"
+                                                             requiredMessage="Favor Selecionar um Estado!"
+                                                             style="width:100%">
+                                    <f:selectItems value="#{utilMB.comboEstado}" />
+                                    <p:ajax update="cidade" event="change" />
+                                </p:selectOneMenu></td>
+
+                            <td><h:outputLabel for="cidade" value="Cidade:" /></td>
+                            <td colspan="1"><p:selectOneMenu id="cidade" converter="CidadeConverter"
+                                                             value="#{professorControle.professor.endereco.cidade}"
+                                                             required="true" requiredMessage="Favor Selecionar uma cidade!"
+                                                             style="width:100%">
+                                    <f:selectItem itemLabel="Selecione" itemValue="" />
+                                    <f:selectItems value="#{professorControle.comboCidade}" />
+                                </p:selectOneMenu></td>
+                        </tr>
+
+
+                        <tr>
+                            <td><h:outputLabel for="rua" value="Rua:" /></td>
+                            <td colspan="3"><p:inputText id="rua"
+                                                         value="#{professorControle.professor.endereco.rua}"
+                                                         required="true" requiredMessage="Favor Informe a Rua!"
+                                                         style="width:379px">
+                                    <f:validateLength minimum="5" />
+
+                                </p:inputText></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel for="bairro" value="Bairro:" /></td>
+                            <td colspan="3"><p:inputText id="bairro"
+                                                         value="#{professorControle.professor.endereco.bairro}"
+                                                         required="true" requiredMessage="Favor Informe o Bairro!"
+                                                         style="width:379px">
+                                    <f:validateLength minimum="5" />
+                                </p:inputText></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel for="complemento" value="Complemento:" />
+                            </td>
+                            <td colspan="3"><p:inputText id="complemento"
+                                                         value="#{professorControle.professor.endereco.complemento}"
+                                                         style="width:379px">
+                                    <f:validateLength minimum="4" />
+                                </p:inputText></td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel for="disciplina" value="Disciplina:" /></td>
+                            <td colspan="1"><p:selectOneMenu id="disciplina" converter="DisciplinaConverter"
+                                                             value="#{professorControle.professor.disciplina}"
+                                                             effect="fade" required="true"
+                                                             requiredMessage="Favor Selecionar uma Disciplina!"
+                                                             style="width:100%">
+                                    <f:selectItems value="#{utilMB.comboDisciplina}"/>
+                                </p:selectOneMenu></td>
+                        </tr>
+                        <tr align="Center">
+                            <td colspan="4"><p:commandButton
+                                    update=":form:panel, :form:mensagem"
+                                    oncomplete="handleSubmitRequest(xhr, status, args);" 
+                                    actionListener="#{professorControle.adicionarProfessor()}"
+                                    value="Inserir Professor" process="formCadastroEdicao"
+                                    />
+                            </td>
+                        </tr>
+                    </table>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+        
+        <script type="text/javascript">
+                                             function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+                                                 dialog = jQuery('#' + dialogName);
+                                                 if (args.validationFailed) {
+                                                     dialog.effect("shake", {times: 3}, 100);
+                                                 } else {
+                                                     clearForm(formName);
+                                                     dialogCadastroEdicao.hide();
+                                                 }
+                                             }
+                                             function clearForm(formName) {
+                                                 jQuery('#' + formName).each(function() {
+                                                     this.reset();
+                                                 });
+                                             }
+        </script>
+    </ui:define>
+</ui:composition>

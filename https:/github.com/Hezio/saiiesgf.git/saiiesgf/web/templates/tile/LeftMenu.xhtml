@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
+       xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <body>
+        <h:form id="menu" prependId="false">
+            <p:growl id="messages" />
+            <p:menu style="width: 95%">
+                <p:submenu label="Principal">
+                    <p:menuitem id="home" value="Home" 
+                                url="/admin/home.xhtml" 
+                                icon="ui-icon-home" />
+
+                    <p:menuitem  value="Avaliação sobre Instituição"
+                                 url="/admin/aluno/avaliacao/frmAvaliacaoInstituicao.xhtml?tipoFicha=0" 
+                                 icon="ui-icon-comment" 
+                                 rendered="#{loginControle.aluno}"/>
+
+                    <p:menuitem  value="Estatistica sobre Instituição"
+                                 url="/admin/aluno/estatistica/instituicao/index.xhtml?tipoFicha=0" 
+                                 icon="ui-icon-comment" 
+                                 rendered="#{sessionScope.loginControle.administrador}"/>
+
+
+
+                    <p:menuitem  value="Avaliação sobre Professor"
+                                 url="/admin/aluno/avaliacao/frmAvaliacaoProfessor.xhtml?tipoFicha=1" 
+                                 icon="ui-icon-comment" 
+                                 rendered="#{loginControle.aluno}"/>
+
+                    <p:menuitem  value="Estatistica sobre Professor"
+                                 url="/admin/aluno/estatistica/professor/index.xhtml?tipoFicha=1" 
+                                 icon="ui-icon-comment" 
+                                 rendered="#{sessionScope.loginControle.administrador}"/>
+
+                    <p:menuitem value="Avaliação sobre Instituição"
+                                url="/admin/professor/avaliacao/frmAvaliacaoInstituicao.xhtml?tipoFicha=2" 
+                                icon="ui-icon-comment"
+                                rendered="#{loginControle.professor}"/>
+
+                    <p:menuitem value="Estatistica sobre Instituição"
+                                url="/admin/professor/estatistica/instituicao/index.xhtml?tipoFicha=2" 
+                                icon="ui-icon-comment"
+                                rendered="#{sessionScope.loginControle.administrador}"/>
+
+                </p:submenu>
+
+                <p:submenu label="Util" rendered="#{loginControle.administrador}">
+                    <p:menuitem id="perfil" value="Perfil" 
+                                url="/admin/administrador/perfil/frmPerfil.xhtml" 
+                                icon="ui-icon-gear" />
+                    <p:menuitem id="usuario" value="Usuario" 
+                                url="/admin/administrador/usuario/frmUsuario.xhtml" 
+                                icon="ui-icon-heart" />
+                    <p:menuitem id="professor" value="Professor" 
+                                url="/admin/administrador/professor/frmProfessor.xhtml"
+                                icon="ui-icon-comment" />
+                    <p:menuitem id="aluno" value="Aluno" 
+                                url="/admin/administrador/aluno/frmAluno.xhtml" icon="ui-icon-person" />
+                </p:submenu>
+
+                <p:submenu >
+                    <p:menuitem id="sair" value="Sair" action="#{loginControle.sair}" ajax="false" icon="ui-icon-power" />
+                </p:submenu>
+            </p:menu>
+            <h:panelGrid columns="1" cellpadding="10px" style="text-align: center;">
+                <h:outputText value="Logado como #{loginControle.usuario.nome}" />
+                <h:outputText value="(#{loginControle.usuario.perfil.nome})" />
+            </h:panelGrid>
+        </h:form>
+    </body>
+</html>

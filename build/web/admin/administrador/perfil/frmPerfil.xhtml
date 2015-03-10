@@ -1,0 +1,88 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form id="form" prependId="false" >
+            <h:panelGroup id="panel">
+                <p:growl id="mensagem" showDetail="true" life="2000" />
+                <p:dataTable widgetVar="listDataTable" id="tabela" var="pf" rowKey="#{pf.id}" paginator="true" rows="10"
+                             value="#{perfilControle.listaPerfis}" emptyMessage="Nenhum valor encontrado" selectionMode="single"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,50" selection="#{perfilControle.perfil}" >
+                    <p:ajax event="rowSelect" update=":formCadastroEdicao:panelCadastroEdicao" />
+                    <f:facet name="header">Lista de Perfis</f:facet>
+
+                    <p:column headerText="Nome" sortBy="#{pf.nome}" filterBy="#{pf.nome}" id="nome" filterMatchMode="contains">  
+                        #{pf.nome}  
+                    </p:column>
+                    <p:column headerText="Descricao" sortBy="#{pf.descricao}" filterBy="#{pf.descricao}" id="descricao" filterMatchMode="contains">  
+                        #{pf.descricao}  
+                    </p:column>
+
+                    <p:column>
+                        <p:commandButton id="alterar" value="Alterar" icon="ui-icon-pencil" title="Alterar"
+                                         actionListener="#{perfilControle.carregarPerfil(pf)}"
+                                         update=":formCadastroEdicao:panelCadastroEdicao" oncomplete="dialogCadastroEdicao.show()" />
+                        <p:commandButton id="excluir" value="Excluir" actionListener="#{perfilControle.excluirPerfil(pf)}" title="Excluir"
+                                         icon="ui-icon-trash" update=":form:panel" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton id="novo" value="Novo Perfil" actionListener="#{perfilControle.prepararAdicionarPerfil}"
+                                         oncomplete="dialogCadastroEdicao.show()" update=":formCadastroEdicao:panelCadastroEdicao" icon="ui-icon-star"
+                                         title="Criar Novo Usuario" onclick="listDataTable.unselectAllRows();" />
+
+                    </f:facet>
+                </p:dataTable>
+            </h:panelGroup>
+        </h:form>
+
+        <p:dialog header="Gerencia de Perfil" widgetVar="dialogCadastroEdicao" resizable="false" modal="true" showEffect="fade"
+                  width="400" appendToBody="true">
+            <h:form id="formCadastroEdicao" prependId="false">
+                <h:panelGroup id="panelCadastroEdicao"  style="margin-bottom:10px;">
+                    <table style="width: 100%">
+                        <tr>
+                            <td align="right"><h:outputLabel for="nome" value="Nome:" /></td>
+                            <td><p:inputText style="width:300px" id="nome" value="#{perfilControle.perfil.nome}" required="true"
+                                             requiredMessage="Favor Informe nome para o pefil!">
+                                    <f:validateLength minimum="3" />
+                                </p:inputText></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><h:outputLabel for="descricao" value="Descricao:" /></td>
+                            <td><p:inputText style="width:300px" id="descricao" value="#{perfilControle.perfil.descricao}" required="true"
+                                             requiredMessage="Favor Informe a Descricao para o pefil!">
+                                    <f:validateLength minimum="10" />
+                                </p:inputText></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="right">
+                                <p:commandButton update=":form:panel"
+                                                 oncomplete="handleSubmitRequest(xhr, status, args);" 
+                                                 actionListener="#{perfilControle.adicionarPerfil()}"
+                                                 value="Salvar Perfil"  />
+                            </td>
+                        </tr>
+                    </table>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+        <script type="text/javascript">
+                                             function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+                                                 dialog = jQuery('#' + dialogName);
+                                                 if (args.validationFailed) {
+                                                     dialog.effect("shake", {times: 3}, 100);
+                                                 } else {
+                                                     clearForm(formName);
+                                                     dialogCadastroEdicao.hide();
+                                                 }
+                                             }
+                                             function clearForm(formName) {
+                                                 jQuery('#' + formName).each(function() {
+                                                     this.reset();
+                                                 });
+                                             }
+
+        </script>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="SaiiesPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <non-jta-data-source>SaiiesPU</non-jta-data-source>
+    <class>br.com.ies.bean.Aluno</class>
+    <class>br.com.ies.bean.Cidade</class>
+    <class>br.com.ies.bean.Disciplina</class>
+    <class>br.com.ies.bean.Endereco</class>
+    <class>br.com.ies.bean.Estado</class>
+    <class>br.com.ies.bean.FichaPessoa</class>
+    <class>br.com.ies.bean.ItemResposta</class>
+    <class>br.com.ies.bean.ModeloFicha</class>
+    <class>br.com.ies.bean.Perfil</class>
+    <class>br.com.ies.bean.Professor</class>
+    <class>br.com.ies.bean.Questao</class>
+    <class>br.com.ies.bean.RespostaFicha</class>
+    <class>br.com.ies.bean.Usuario</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="use_sql_comments" value="true"/>
+      <property name="hibernate.connection.release_mode" value="on_close"/>
+      <property name="hibernate.max_fetch_depth" value="3"/>
+      <property name="hibernate.jdbc.batch_size" value="50"/>
+    </properties>
+  </persistence-unit>
+</persistence>

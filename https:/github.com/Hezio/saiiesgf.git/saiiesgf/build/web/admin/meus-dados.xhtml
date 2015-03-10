@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<ui:composition template="/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <center>
+            <h:panelGroup rendered="#{homeControle.categoryModel != null}">
+                <p:barChart id="basic" value="#{homeControle.categoryModel}" legendPosition="ne"  
+                            title="Resultados do Feedback da Avaliação" min="0" max="30" style="height:400px"/> 
+            </h:panelGroup>
+        </center>
+        <h:messages></h:messages>
+    </ui:define>
+</ui:composition>

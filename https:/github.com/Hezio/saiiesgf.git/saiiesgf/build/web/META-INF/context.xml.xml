@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<Context antiJARLocking="true" path="/Saiies">
+    
+  <ResourceLink global="jdbc/saiies-global" name="jdbc/saiies" type="javax.sql.DataSource"/>
+
+
+</Context>-->

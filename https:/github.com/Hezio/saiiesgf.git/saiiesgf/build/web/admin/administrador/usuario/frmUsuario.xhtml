@@ -1,0 +1,99 @@
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form id="form" prependId="false" >
+            <h:panelGroup id="panel">
+                <p:growl id="mensagem" showDetail="true" life="2000" /> 
+                <p:dataTable widgetVar="listDataTable" id="tabela" var="us" rowKey="#{us.id}" paginator="true" rows="10"
+                             value="#{usuarioControle.listaUsuarios}" emptyMessage="Nenhum valor encontrado" selectionMode="single"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="10,15,50" selection="#{usuarioControle.usuario}" >
+
+                    <f:facet name="header">Lista de Usuarios</f:facet>
+                    <p:column headerText="Nome" sortBy="#{us.nome}" filterBy="#{us.nome}" id="nome">  
+                        #{us.nome}  
+                    </p:column>
+                    <p:column headerText="Login" sortBy="#{us.login}" filterBy="#{us.login}" id="login">  
+                        #{us.login}  
+                    </p:column>
+                    <p:column headerText="Perfil" sortBy="#{us.perfil.nome}" filterBy="#{us.perfil.nome}" id="Perfil">  
+                        #{us.perfil.nome}  
+                    </p:column>
+                    <p:column>
+                        <p:commandButton id="alterar" value="Alterar" icon="ui-icon-pencil" title="Alterar"
+                                         update=":formCadastroEdicao:panelCadastroEdicao" 
+                                         actionListener="#{usuarioControle.carregarUsuario(us)}"
+                                         oncomplete="dialogCadastroEdicao.show()" />
+                        <p:commandButton id="excluir" value="Excluir" actionListener="#{usuarioControle.excluirUsuario(us)}" title="Excluir"
+                                         icon="ui-icon-trash" update=":form:panel" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton id="novo" value="Novo Usuario" actionListener="#{usuarioControle.prepararAdicionarUsuario}"
+                                         oncomplete="dialogCadastroEdicao.show()" update=":formCadastroEdicao:panelCadastroEdicao" icon="ui-icon-star"
+                                         title="Criar Novo Usuario" onclick="listDataTable.unselectAllRows();" />
+
+                    </f:facet>
+                </p:dataTable>
+            </h:panelGroup>
+        </h:form>
+
+        <p:dialog header="Gerencia de Usuarios" widgetVar="dialogCadastroEdicao" resizable="false"
+                  modal="true" showEffect="fade" appendToBody="true"
+                  width="580">
+            <h:form id="formCadastroEdicao" prependId="false">
+                <h:panelGrid id="panelCadastroEdicao" columns="2" style="margin-bottom:10px">
+                    <h:outputLabel for="nome" value="Nome:" />
+                    <p:inputText id="nome" value="#{usuarioControle.usuario.nome}" required="true" requiredMessage="Favor Informar o nome!">
+                        <f:validateLength minimum="5" />
+                    </p:inputText>
+                    <h:outputLabel for="login" value="Login:" />
+                    <p:inputText id="login" value="#{usuarioControle.usuario.login}" required="true" requiredMessage="Favor Informar o login!">
+                        <f:validateLength minimum="5" />
+                    </p:inputText>
+                    <h:outputLabel for="senha" value="Senha:" />
+                    <p:password id="senha" value="#{usuarioControle.usuario.senha}" required="true" 
+                                requiredMessage="Favor Informar a Senha!" redisplay="true">
+                    </p:password>
+                    
+                    <h:outputLabel for="perfil" value="Perfil: " rendered="#{usuarioControle.usuario.id == null}"/>
+                    <p:selectOneMenu id="pefil" value="#{usuarioControle.usuario.perfil}" effect="fade"
+                                     required="true" requiredMessage="Favor Selecionar um Perfil!"
+                                     converter="PerfilConverter"
+                                     rendered="#{usuarioControle.usuario.id == null}">
+                        <f:selectItems value="#{utilMB.comboPerfil}" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel for="tipo" value="Tipo usuário: " />
+                    <p:selectOneRadio value="#{usuarioControle.tipoPessoa}" required="true" 
+                                      requiredMessage="Favor Informar tipo de usuário">
+                        <f:selectItem itemValue="0" itemLabel="Professor"/>
+                        <f:selectItem itemValue="1" itemLabel="Aluno"/> 
+                    </p:selectOneRadio>
+                   <br />
+                    <p:commandButton update=":form:panel, :form:mensagem" 
+                                     oncomplete="handleSubmitRequest(xhr, status, args);"
+                                     actionListener="#{usuarioControle.adicionarUsuario}"
+                                     value="Salvar Usuario"/>
+
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        <script type="text/javascript">
+                                             function handleSubmitRequest(xhr, status, args, dialogName, formName) {
+                                                 dialog = jQuery('#' + dialogName);
+                                                 if (args.validationFailed) {
+                                                     dialog.effect("shake", {times: 3}, 100);
+                                                 } else {
+                                                     clearForm(formName);
+                                                     dialogCadastroEdicao.hide();
+                                                 }
+                                             }
+                                             function clearForm(formName) {
+                                                 jQuery('#' + formName).each(function() {
+                                                     this.reset();
+                                                 });
+                                             }
+        </script>
+    </ui:define>
+</ui:composition>

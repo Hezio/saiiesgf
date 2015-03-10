@@ -1,0 +1,31 @@
+<ui:composition template="/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- 	<ui:define name="content"> -->
+
+    <ui:define name="content">
+        <h:form prependId="false">
+
+            <p:growl autoUpdate="true" id="msgs"/>
+
+            <h1>Avaliação Alunos - Professor </h1>
+
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Professor:"/>
+                <p:selectOneMenu value="#{estatisticaControleMB.professor}" converter="ProfessorConverter">
+                    <f:selectItem itemLabel="Selecione um Professor" itemValue=""/>
+                    <f:selectItems value="#{utilMB.comboProfessores}"/>
+                </p:selectOneMenu>
+                <p:commandButton value="Buscar" update="ficha" action="#{estatisticaControleMB.buscar()}"/>
+            </h:panelGrid>
+
+            <h:panelGroup id="ficha">
+                <ui:include src="/WEB-INF/partials/admin/estatisticas/index.xhtml"/>
+            </h:panelGroup>
+            
+        </h:form>
+    </ui:define>
+</ui:composition>

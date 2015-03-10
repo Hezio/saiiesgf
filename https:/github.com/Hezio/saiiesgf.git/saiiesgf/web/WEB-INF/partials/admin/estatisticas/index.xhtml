@@ -1,0 +1,63 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <!-- 	<ui:define name="content"> -->
+
+
+
+    <h:panelGrid columns="2" rendered="#{mostrarcomponete}">
+        <h4>Total de questionários respondidos:</h4>
+                <h:panelGroup rendered="#{estatisticaControleMB.totalAvaliacaoesRespondidas}">
+                    <p:pieChart  value="#{estatisticaControleMB.totalAvaliacaoesRespondidas}" style="width:40px;height:30px"  
+                                 title="Instituicao" legendPosition="w" showDataLabels="true"/>
+                </h:panelGroup>
+    </h:panelGrid>
+
+
+    <table style="border-color: black; border-style: solid;">
+
+        <tr style="background-color: aqua; alignment-adjust: central; border-style: solid;">
+            <td style="width: 45%">Questão</td>
+            <td style="width: 21%">Respostas</td>
+            <td>FA</td>
+            <td>FR</td>
+        </tr>
+
+        <ui:repeat value="#{estatisticaControleMB.modeloFicha.questoes}" var="questao" varStatus="indexQuestao" >
+            <tr style="border-style: solid; border-color: black;">
+                <td >
+                    #{indexQuestao.index+1} )
+                    <h:outputLabel value="#{questao.nomeQuestao}"
+                                   style="font-size:large" />
+                </td>
+
+
+                <td colspan="3">
+                    <table style="width: 100%">
+                        <ui:repeat value="#{questao.itensResposta}" var="item">
+                            <tr>
+                                <td style="width: 234px;">
+                                    <h:outputLabel value="#{item.nomeItemResposta}"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{estatisticaControleMB.getQtdRespondida(questao,item)}" style="margin-left: 33px;margin-right: 3px;"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="#{(estatisticaControleMB.getQtdRespondida(questao,item)* 100) / (estatisticaControleMB.totalAvaliacaoesRespondidas eq 0 ? 1:estatisticaControleMB.totalAvaliacaoesRespondidas)}" 
+                                                  style="margin-left: 3px;margin-right: 3px;">
+                                        <f:convertNumber maxFractionDigits="2"/>
+                                    </h:outputText> %
+                                </td>  
+                            </tr>
+                        </ui:repeat>
+                    </table>
+                </td>
+            </tr>
+        </ui:repeat>
+    </table>
+
+
+</ui:composition>

@@ -1,0 +1,34 @@
+<ui:composition 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <!-- 	<ui:define name="content"> -->
+
+
+
+    <ui:repeat value="#{avaliacaoPessoaMB.modeloFicha.questoes}" var="questao" varStatus="indexQuestao" >
+        #{indexQuestao.index+1} )
+        <h:outputLabel value="#{questao.nomeQuestao}"
+                       style="font-size:large" />
+        <br/>
+
+        <p:selectOneRadio value="#{avaliacaoPessoaMB.respostas[questao].itemResposta}" 
+                          required="true" requiredMessage="Selecione uma opção"
+                          converter="ItemRespostaConverter"
+                          layout="grid" columns="1">
+            <f:selectItems value="#{questao.itensResposta}" var="item" 
+                           itemLabel="#{item.nomeItemResposta}" itemValue="#{item}"/>
+        </p:selectOneRadio>
+        <br/>
+        <br/>
+    </ui:repeat>
+
+    <br/>
+    <br/>
+
+    <p:commandButton value="Salvar" action="#{avaliacaoPessoaMB.salvarAvaliacao()}"/>
+
+
+</ui:composition>
